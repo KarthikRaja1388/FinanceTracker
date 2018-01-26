@@ -1,0 +1,164 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="stylesheet" href="https://use.fontawesome.com/3745c7cd27.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<link rel="stylesheet" type="text/css" href="/css/master.css" />
+<link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
+<link rel="stylesheet" type="text/css" href="/css/forms.css"/>
+<link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js" type="text/javascript"></script>
+
+<title>Dashboard - Finance Tracker</title>
+
+</head>
+
+<body>
+	 <div id="navContainer" class="text-center col-md-3 col-sm-3 col-xs-12">
+        <i class="fa fa-window-close-o navToggle" style="color:#4E2A84;"></i>
+        	<ul>
+        		<li><a href="#" th:href="@{/Income/View}"><i class="fa fa-eye">&nbsp;</i>Income</a></li>
+        		<li><a href="#" th:href="@{/Expense/View}"><i class="fa fa-eye">&nbsp;</i>Expense</a></li>
+        		<li class="hidden-md hidden-sm visible-xs"><i class="fa fa-pie-chart">&nbsp;</i><a href="#">View Chart</a></li>
+        		<li><a href="#" th:href="@{/Logout}"><i class="fa fa-sign-out">&nbsp;</i>Log out</a></li>
+        	</ul>
+     </div>
+	<header class="container-fluid">
+    	<div class="col-md-3 col-sm-3 col-xs-2">
+        	<i class="fa fa-bars navToggle"></i>
+        </div>
+    	<div class="col-md-6 col-sm-6 col-xs-10 text-center">
+            <h2 class="title">Finance Tracker</h2>
+        </div>
+        <div class="col-md-3 col-sm-3 hidden-xs">
+        	<p th:text="'Welcome' +' '+ ${session.sessionUserFirstName}" class="greeting"></p>
+        </div>
+    </header>
+	<main class="container-fluid">
+
+		<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+			      <div th:if="${(param.i_action != null) and (param.i_action[0] == 'suxs')}" class="alert alert-success alert-dismissible" role="alert">Income added Successfully
+        			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+        		</div>
+			      <div th:if="${(param.e_action != null) and (param.e_action[0] == 'add')}" class="alert alert-success alert-dismissible" role="alert">Expense added Successfully
+        			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+        		</div>        		
+        	<div class="row col-md-12 col-sm-12 col-xs-12">
+            	<div class="pieChartContainer col-md-12 col-sm-12 hidden-xs">
+            		<div class="col-md-12 col-sm-12  text-left">
+            			<h1 class="text-center" th:text="${#dates.format(#dates.createNow(),'MMM yyyy')}"></h1>            		
+            			<canvas id="myChart"></canvas>
+            		</div>
+                </div>
+               	<div class="col-md-12 col-sm-12 col-xs-12 amountContainer"><!-- start of Amount Container-->
+                	<div class="col-md-4 col-sm-4 col-xs-12">
+            			<h1 class="text-center hidden-md hidden-sm visible-xs month" th:text="${#dates.format(#dates.createNow(),'MMM yyyy')}"></h1>            		                		
+                		<div class="col-md-12 col-sm-12 col-xs-12 amount">
+                        	<h3>Income</h3>
+                            <h1 th:text="${'$'+incomeFromDb}" id="income"></h1>
+                            <a href="" th:href="@{/Income}"><i class="fa fa-plus"></i> Add Income</a>
+                        </div>
+                	</div>
+                	<div class="col-md-4 col-sm-4 col-xs-12">
+                		<div class="col-md-12 col-sm-12 col-xs-12 amount">
+                        	<h3>Expense</h3>
+                            <h1 th:text="${'$'+expensesFromDb}" id="expense"></h1>
+                            <a href="" th:href="@{/Expense}"><i class="fa fa-plus"></i> Add Expense</a>                            
+                        </div>
+                	</div>
+                	<div class="col-md-4 col-sm-4 col-xs-12">
+                		<div class="col-md-12 col-sm-12 col-xs-12 amount">
+                        	<h3>Savings</h3>
+                            <h1 id="savings">$450</h1>
+                            <p th:text="'as on'+' '+${currentDate}"></p>                         
+                        </div>
+                	</div>  	              	
+                </div><!-- End of Amount Container-->
+                <div class="categoriesContainer col-md-12 col-sm-12 col-xs-12">
+                	<h3><i class="fa fa-th-large" aria-hidden="true">&nbsp;&nbsp;</i>Categories</h3>
+                    <div class="row">
+                    	<div class="categoriesInner">
+                        	<div class="col-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 categories">
+                                    	<h3><i class="fa fa-home"></i></h3>
+                                        <h3 class="hidden-xs">Rent</h3>
+                                        <h5 th:text="${'$'+rent}"></h5>
+                                    </div>
+                                 </a>
+                            </div>
+                        	<div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-cutlery"></i></h3>
+                                        <h3  class="hidden-xs">Food</h3>
+                                        <h5 th:text="${'$'+ foodExpense}"><span class="hidden-xs">spent this month</span></h5>                                     
+                                    </div>
+                                 </a>
+                            </div>
+                        	<div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-car"></i></h3>
+                                        <h3  class="hidden-xs">Transport</h3>
+                                        <h5 th:text="${'$' + transportExpense}"><span class="hidden-xs">spent this month</span></h5>                                    
+                                    </div>
+                                 </a>
+                            </div>
+                        	<div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-sticky-note"></i></h3>
+                                        <h3  class="hidden-xs">Bills</h3>
+                                        <h5 th:text="${'$' + bills}"></h5>
+                                    </div>
+                                 </a>
+                            </div>
+                        	<div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-credit-card"></i></h3>
+                                        <h3 class="hidden-xs">Loan</h3>                                     
+                                        <h5 th:text="${'$'+ loan}"></h5>                                   
+                                    </div>
+                                 </a>
+                            </div>
+                        	<div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-apple"></i></h3>
+                                        <h3  class="hidden-xs">Groceries</h3>
+                                       <h5 th:text="${'$' + groceries}"></h5>
+                                    </div>
+                                 </a>
+                            </div>
+                            <div class="vol-md-4 col-sm-4 col-xs-6">
+                            	<a href="">
+                                    <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1  categories">
+                                    	<h3><i class="fa fa-usd"></i></h3>
+                                        <h3 class="hidden-xs">Misc.</h3>
+                                        <h5 th:text="${'$' + misc}"></h5>  
+                                    </div>
+                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/custom.js" type="text/javascript"></script>
+</body>
+</html>

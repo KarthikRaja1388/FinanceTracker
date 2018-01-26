@@ -1,0 +1,84 @@
+/* CSS Document */
+.button{
+	border-radius:0px;
+	background:#684C96;
+	color:#fff;
+	font-size:16px;
+	font-weight:500;
+	cursor:pointer;
+	text-decoration:none;
+	position:relative;
+	height:35px;
+	margin-top: 20px;
+	border:none;
+	text-decoration:none;
+}
+/*Form styling*/
+.formContainer input, .formContainer select{
+	height:35px;
+	border-radius:0px;
+	background:none;
+	border:1px solid #fff;
+	color:#fff;
+}
+.formContainer select option{
+	color:#4E2A84;
+}
+.button:hover{
+	color:#fff;
+	text-decoration:none;
+} 
+
+.formContainer,
+.socialSignIn,
+.socialSignIn .button,
+.socialSignIn .innerContainer,
+.socialSignIn .outerContainer{
+	padding-left: 0;
+	padding-right: 0;
+}
+	
+.formContainer .button:before,
+.socialSignIn .button:before{
+	content:"";
+	position:absolute;
+	height:0;
+	width:0;
+	top:0px;
+	left:0px;
+	background-color:transparent;
+	border:1px solid transparent;
+}
+.formContainer .button:hover:before,
+.socialSignIn .button:hover:before{
+	animation:borderAnimation .5s ease-in forwards;
+}
+.formContainer #sourceOfIncome option:hover{
+	color:#fff;
+	background:#684C96;
+}
+.formContainer,
+ .socialSignIn{
+	margin-top: 40px;
+	font-family:Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size:16px;
+	color:#fff;
+}
+.formContainer h4{
+	font-size:2.5em;
+	margin-bottom: 30px;
+}
+.forgotPassword{
+	margin-top: 20px;
+}
+.forgotPassword a{
+	text-decoration:none;
+	color:#fff;
+}
+.socialSignIn .button i{
+	position:absolute;
+	left:1px;
+	top:1px;
+	padding: 8px 10px 9px 10px;
+	background:#333;
+}

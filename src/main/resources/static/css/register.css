@@ -1,0 +1,58 @@
+.wrapper{
+	color:#fff;
+	margin: 20px;
+	padding: 5px;
+}
+#formContainer,
+ #socialSignIn{
+	margin-top: 40px;
+	font-family:Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+	font-size:16px;
+
+}
+#formContainer input{
+	height:35px;
+	border-radius:0px;
+	background:none;
+	border:1px solid #fff;
+	color:#fff;
+}
+#formContainer small{
+	font-size:12px;
+/* 	color: #F24405;
+ */
+ 	color: #fff;
+ }
+.button:hover{
+	color:#fff;
+	text-decoration:none;
+} 
+#formContainer .button:before,
+#socialSignIn .button:before{
+	content:"";
+	position:absolute;
+	height:0;
+	width:0;
+	top:0px;
+	left:0px;
+	background-color:transparent;
+	border:1px solid transparent;
+}
+#formContainer .button:hover:before,
+#socialSignIn .button:hover:before{
+	animation:borderAnimation .5s ease-in forwards;
+}
+.forgotPassword{
+	margin-top: 20px;
+}
+.forgotPassword a{
+	text-decoration:none;
+	color:#fff;
+}
+#socialSignIn .button i{
+	position:absolute;
+	left:1px;
+	top:1px;
+	padding: 8px 10px 9px 10px;
+	background:#333;
+}

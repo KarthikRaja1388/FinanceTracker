@@ -1,0 +1,66 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" href="https://use.fontawesome.com/3745c7cd27.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+<link rel="stylesheet" type="text/css" href="css/master.css" />
+<link rel="stylesheet" type="text/css" href="css/forms.css" />
+<link rel="stylesheet" type="text/css" href="css/layout.css" />
+
+<title>Add Expense - Finance Tracker</title>
+</head>
+
+<body>
+	<div class="col-md-10 col-sm-10 col-xs-12 wrapper">
+    	<div class="row titleContainer">
+       		<a href="#" th:href="@{/Dashboard}" class="homeButton"><i class= "fa fa-home"></i></a>
+        	<h2 class="text-center title">Finance Tracker</h2>
+            <hr />
+        </div>
+        <div class="formContainer" >
+        	<h4 class="text-center hidden-xs">Add Expense&nbsp;<i class="fa fa-money"></i></h4>
+        	<form action="#" th:action="@{/Expense/Add}" method="post" th:object="${expense}" class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
+            	<div class="form-group">
+            		<label for="">Amount Spent</label>
+            		<input type="text" th:field="*{amountSpent}"  class="form-control" autofocus="autofocus"/>
+            		<label th:if="${#fields.hasErrors('amountSpent')}">* amount can't be empty or can't have alphabets</label>
+            	</div>
+                 <div class="form-group">
+                	<label for="">Date Spent</label>
+                    <input type="date" class="form-control" th:field="*{dateSpent}"/>
+            		<label th:if="${#fields.hasErrors('dateSpent')}">* please enter or choose a valid date</label>                    
+                </div>
+                <div class="form-group">
+                	<label for="">Place</label>
+                    <input type="text" class="form-control" th:field="*{placeSpent}" />
+            		<label th:if="${#fields.hasErrors('dateSpent')}">* place can't have numbers or special characters</label>                    
+                 </div>
+				 <div class="form-group">
+                	<label for="category">Category</label>
+                    <select name="category" id="category" class="form-control" th:field="*{category}">
+                    	<option value="--" th:value="--">Select category</option>
+                    	<option value="rent" th:value="rent" >Rent</option>
+                    	<option value="food" th:value="food">Food</option>
+                    	<option value="transport" th:value="transport">Transport</option>
+                    	<option value="bills" th:value="bills">Bills</option>
+                        <option value="loan" th:value="loan">Loan</option>
+                        <option value="groceries" th:value="groceries">Groceries</option>
+                        <option value="misc" th:value="misc">Misc.</option>
+                    </select>
+            		<label th:if="${#fields.hasErrors('dateSpent')}">* choose a category</label>                    
+                 </div>
+                <div class="form-group spacing">
+                	<button class="form-control button"><i class="fa fa-minus">&nbsp;</i>Add Expense</button>
+                 </div>
+            </form>
+		</div>            	
+    </div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
+

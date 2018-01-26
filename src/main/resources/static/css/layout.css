@@ -1,0 +1,33 @@
+/* CSS Document */
+
+@media screen and (max-width:450px){
+	.wrapper{
+		min-height:100%;
+ 		padding:10px 0px;
+	}
+	.formContainer{
+		position:relative;
+		height:100%;
+	}
+	.socialSignIn{
+		margin-top: 30px;
+	}
+	.socialSignIn .button{
+		margin-top: 10px;
+	}
+	#navContainer{
+		opacity: 0.9;
+	}
+
+	.homeButton{
+		left:0;
+		top:20px;
+	}
+	
+	.amountContainer{
+		margin-top:30px;
+	}
+	.title{
+	font-size:30px;
+	}
+}

@@ -1,0 +1,148 @@
+/* CSS Document */
+
+html,body{
+	height:auto;
+	width:100%;
+	background:#4E2A84;
+	color:#fff;
+	position: relative;
+}
+header.container-fluid,main.container-fluid{
+	margin:0;
+	padding:0;
+}
+
+header{
+	height:100px;
+	box-shadow:1px 1px 5px #fff;
+	margin: auto;
+}
+header h2{
+	line-height:70px;
+}
+header>div{
+	padding: 0px;
+}
+.greeting{
+	line-height: 100px;
+	text-align: right;
+	font-weight: bold;
+}
+main{
+	height:auto;
+}
+
+#userNameDisplay i{
+	color:#fff;
+	line-height:100px;
+	font-size:30px;
+}
+#userNameDisplay span{
+	font-size:18px;
+	color:#fff;
+}
+#navContainer{
+	height:100%;
+/*	width:20%;
+*/	position:absolute;
+	top:0;
+	left:0;
+	background:#fff;
+	color:#4E2A84;
+	transform:translateX(-100%);
+	transition:all .5s linear;	
+	z-index:999;
+}
+#navContainer ul {
+	text-align: center;
+}
+#navContainer ul li{
+	font-size: 1.2em;
+	font-family: bodyfont;
+	list-style-type: none;
+	margin:10px 0px;
+	padding: 10px 0px;
+}
+#navContainer ul li a{
+	text-decoration: none;
+	color: #4E2A84;
+	font-weight: bold;
+}
+.navToggle{
+	background-color:transparent;
+	color:#fff;
+	line-height:100px;
+	font-size:30px;
+	border:none;
+	cursor:pointer;
+}
+#navContainer.slideMenu{
+	transform:translateX(0%);
+}
+.pieChartContainer{
+	height: auto;
+	position: relative;
+	margin-top: 30px;	
+	margin-bottom: 30px;	
+	color: #fff;
+}
+.pieChartContainer h1{
+	text-align: center;
+	font-family:bodyfont;
+	margin-top: 0px;
+}
+.amountContainer .month{
+	font-family: bodyfont;
+	margin-bottom:30px;
+	
+}
+.amount{
+	height:200px;
+	border:1px solid #fff;
+	color:#fff;
+	text-align:center;
+	font-family:bodyfont;
+	margin:5px;
+}
+.amount h3{
+	line-height:2em;
+	font-weight:bold;
+}
+.amount a{
+	text-decoration:none;
+	color:#fff;
+}
+
+
+.categoriesContainer{
+	margin-top: 30px;
+}
+.categoriesContainer h3{
+	font-family:bodyfont;
+	font-weight:bold;
+	margin:10px;
+	padding:10px;
+	font-size: 1.5em;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin:0px;
+}
+.categories{
+	background:#5B3B8C;
+	color:#fff;
+	height:auto;
+	font-family:bodyfont;
+	margin:30px 30px;
+	text-align:center;
+}
+.categories h3{
+	font-weight:2em;
+	font-weight:bold;
+}
+
+@media screen and (max-width:450px){
+	#navContainer{
+		width:100%;
+		background:#fff;
+	}
+}
