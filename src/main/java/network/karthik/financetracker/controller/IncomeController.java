@@ -1,5 +1,9 @@
 package network.karthik.financetracker.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +52,11 @@ public class IncomeController {
 	public String viewIncome(Model model,@SessionAttribute("sessionUser")User user) {
 		model.addAttribute("incomeFromDb",incomeService.findIncomeByMonth(user.getUserId()));
 		return "viewIncome";
+	}
+	
+	@RequestMapping(value= "/Export", method=RequestMethod.GET )
+	public void getExpenseReport(@SessionAttribute("sessionUser")User user,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		incomeService.buildExcelDocument(user.getUserId());
+		incomeService.downloadFile(request, response, user.getUserId());
 	}
 }

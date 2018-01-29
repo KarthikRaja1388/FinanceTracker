@@ -1,7 +1,11 @@
 package network.karthik.financetracker.controller;
 
-import javax.validation.Valid;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +14,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
 import network.karthik.financetracker.entity.Expense;
 import network.karthik.financetracker.entity.User;
 import network.karthik.financetracker.services.ExpenseService;
 
 @Controller
 @RequestMapping(value="/Expense")
+@SessionAttributes("sessionUser")
 public class ExpenseController {
 
 	@Autowired
@@ -57,5 +63,11 @@ public class ExpenseController {
 		return "redirect:/Expense/View?e_action=del";
 		
 	}
-	
+
+	@RequestMapping(value= "/Export", method=RequestMethod.GET )
+	public void getExpenseReport(@SessionAttribute("sessionUser")User user,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		expenseService.buildExcelDocument(user.getUserId());
+		expenseService.downloadFile(request, response, user.getUserId());
+	}
+
 }
