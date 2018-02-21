@@ -20,18 +20,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-
 	public UserController() {
 		super();
 	}
 
-	public UserController(UserService userService) {
-		super();
-		this.userService = userService;
-
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public String userLogin(@ModelAttribute("user") User user, Model model,HttpSession session) {
 		
 		if( userService.login(user.getEmail(),user.getPassword()) != null) {
@@ -43,12 +36,6 @@ public class UserController {
 			return "index";
 		}
 
-	}
-	
-	@RequestMapping(value="/Register", method = RequestMethod.GET)
-	public String register(Model model,@ModelAttribute User user) {
-		model.addAttribute("user",user);
-		return "register";
 	}
 	
 	@RequestMapping(value="/Register", method = RequestMethod.POST)
@@ -68,12 +55,16 @@ public class UserController {
 	@RequestMapping(value = "/Logout")
 	public String userLogout(HttpSession session) {
 		session.invalidate();
-		return "redirect:/home?logout=y";
+		return "redirect:/home?action=logout";
 	}
 	
+	
+
 	public void resgisterUserToSession(User user,HttpSession session) {
 		session.setAttribute("sessionUser", user);
 		session.setAttribute("sessionUserFirstName", user.getFirstName());
 	}
+	
+	
 	
 }

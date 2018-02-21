@@ -1,5 +1,7 @@
 package network.karthik.financetracker.services;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +42,15 @@ public class UserService {
 	
 	public User findUserById(Long id) {
 		return userRepository.findOne(id);
+	}
+	
+	public void sendResetPasswordEmail(String email) {
+		Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.karthik.network");
+		prop.put("mail.smtp.socketFactory.port", "465");
+		prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLFactory");
+		prop.put("mail.smtp.auth", "true");
+		prop.put("mail.smtp.port", "465");
+		
 	}
 }

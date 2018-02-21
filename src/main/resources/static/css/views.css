@@ -23,9 +23,16 @@ body,html{
 	margin-bottom: 30px;
 
 }
-.monthChooser select{
+.monthChooser button{
+	border-radius:0px;
+}
+.monthChooser ul{
 	border-radius:0px;
 	text-transform:uppercase;
+	margin: auto;
+}
+..monthChooser ul li{
+	text-align: center;
 }
 .exportContainer a{
 	font-weight:bold;

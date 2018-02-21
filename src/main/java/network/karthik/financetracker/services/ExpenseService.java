@@ -1,6 +1,5 @@
 package network.karthik.financetracker.services;
 
-import java.awt.PageAttributes.MediaType;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +10,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,16 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.assertj.core.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.servlet.view.document.AbstractXlsView;
 
 import network.karthik.financetracker.entity.Expense;
 import network.karthik.financetracker.entity.User;
@@ -48,11 +39,26 @@ public class ExpenseService{
 	@Autowired
 	private DateUtility dateUtility;
 
-	public ExpenseService(IExpenseRepository expenseRepository) {
+	
+	public ExpenseService() {
+		super();
+	}
+
+	/*public ExpenseService(IExpenseRepository expenseRepository) {
 		this.expenseRepository = expenseRepository;
 	}
 	
-	
+	public ExpenseService(IUserRepository userRepository) {
+		super();
+		this.userRepository = userRepository;
+	}
+
+	public ExpenseService(DateUtility dateUtility) {
+		super();
+		this.dateUtility = dateUtility;
+	}*/
+
+
 	public void add(Expense expense) {
 		expenseRepository.save(expense);
 	}
@@ -72,33 +78,60 @@ public class ExpenseService{
 		expenseRepository.delete(expenseId);
 	}
 	
-	public float getExpense(Long id) {
+	public Expense getExpenseById(Long id) {
+		return expenseRepository.findOne(id);
+	}
+	
+	public float getAllExpense(Long id) {
 		List<Expense> expenses = expenseRepository.findByUserUserId(id);
 		float totalExpense = 0;
 		for (Expense expense : expenses) {
-			if(dateUtility.getMonthOfDate(expense.getDateSpent())) {
 				totalExpense = totalExpense + expense.getAmountSpent();
+		}
+		return totalExpense;
+	}
+	/**
+	 * Method to return the total expense of Current month
+	 * @param id holds the value of current user
+	 * @return float Total of expense
+	 */
+	
+	public float getExpense(Long id) {
+		List<Expense> expenses = expenseRepository.findByUserUserId(id);
+
+		float totalExpense = 0;
+		if(!expenses.isEmpty()) {
+			for (Expense expense : expenses) {
+				if (dateUtility.compareMonth(dateUtility.returnCurrentDate(), expense.getDateSpent())) {
+					totalExpense = totalExpense + expense.getAmountSpent();
+				}
 			}
 		}
 		return totalExpense;
 	}
 	
 	public float getExpenseByCategory(String category,Long id) {
-		float foodExpense = 0;
-		List<Expense> foodExpenseList = expenseRepository.findByCategoryAndUserUserId(category, id);
-		
-		for (Expense expense : foodExpenseList) {
-			foodExpense = foodExpense + expense.getAmountSpent();
+		float categoryExpense = 0;
+		List<Expense> expenseList = expenseRepository.findByCategoryAndUserUserId(category, id);
+		if(!expenseList.isEmpty()) {
+			for (Expense expense : expenseList) {
+				if(dateUtility.compareMonth(dateUtility.returnCurrentDate(), expense.getDateSpent())) {
+					categoryExpense = categoryExpense + expense.getAmountSpent();
+				}
+			}
 		}
-		return foodExpense;
+		return categoryExpense;
 	}
 	
-	public List<Expense> findExpenseByMonth(Long id){
+	public List<Expense> findExpenseForCurrentMonth(Long id){
 		List<Expense> expenseList = new ArrayList<>();
-		Iterator<Expense> iterator = expenseRepository.findByUserUserId(id).iterator();
+
+		List<Expense> expenses = expenseRepository.findByUserUserId(id);
 		
-		while(iterator.hasNext()) {
-			expenseList.add(iterator.next());
+		for(Expense expense : expenses) {
+			if(dateUtility.compareMonth(dateUtility.returnCurrentDate(), expense.getDateSpent())) {
+				expenseList.add(expense);
+			}
 		}
 		return expenseList;
 		
@@ -115,6 +148,32 @@ public class ExpenseService{
 		return expenseList;
 	}
 	
+	public List<Expense> findExpenseForChosenMonth(Long id,String month){
+		String date = null;
+		List<Expense> expenseList = new ArrayList<>();
+		if(month.equalsIgnoreCase("Jan"))date = "2018-01-01";
+		if(month.equalsIgnoreCase("Feb"))date = "2018-02-01";
+		if(month.equalsIgnoreCase("Mar"))date = "2018-03-01";		
+		if(month.equalsIgnoreCase("Apr"))date = "2018-04-01";		
+		if(month.equalsIgnoreCase("May"))date = "2018-05-01";		
+		if(month.equalsIgnoreCase("Jun"))date = "2018-06-01";		
+		if(month.equalsIgnoreCase("Jul"))date = "2018-07-01";		
+		if(month.equalsIgnoreCase("Aug"))date = "2018-08-01";		
+		if(month.equalsIgnoreCase("Sep"))date = "2018-09-01";		
+		if(month.equalsIgnoreCase("Oct"))date = "2018-10-01";		
+		if(month.equalsIgnoreCase("Nov"))date = "2018-11-01";		
+		if(month.equalsIgnoreCase("Dec"))date = "2018-12-01";	
+		
+		List<Expense> fetchedExpenseList = expenseRepository.findByUserUserId(id);
+			for(Expense expense : fetchedExpenseList) {
+				if(dateUtility.compareMonth(date, expense.getDateSpent())) {
+					expenseList.add(expense);
+				}
+			}
+		
+		return expenseList;
+		
+	}
 	
 	public void buildExcelDocument(Long id) throws IOException {
 		

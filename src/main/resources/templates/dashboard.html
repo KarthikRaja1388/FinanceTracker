@@ -19,9 +19,20 @@
 </head>
 
 <body>
+<!-- 	<div class="preLoader">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div> -->
 	 <div id="navContainer" class="text-center col-md-3 col-sm-3 col-xs-12">
         <i class="fa fa-window-close-o navToggle" style="color:#4E2A84;"></i>
         	<ul>
+        		<li><a href="" th:href="@{/Dashboard}"><i class="fa fa-tachometer">&nbsp;</i>Dashboard</a></li>        		
         		<li><a href="#" th:href="@{/Income/View}"><i class="fa fa-eye">&nbsp;</i>Income</a></li>
         		<li><a href="#" th:href="@{/Expense/View}"><i class="fa fa-eye">&nbsp;</i>Expense</a></li>
         		<li class="hidden-md hidden-sm visible-xs"><i class="fa fa-pie-chart">&nbsp;</i><a href="#">View Chart</a></li>
@@ -40,18 +51,27 @@
         </div>
     </header>
 	<main class="container-fluid">
-
-		<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-			      <div th:if="${(param.i_action != null) and (param.i_action[0] == 'suxs')}" class="alert alert-success alert-dismissible" role="alert">Income added Successfully
+ 				<div th:if="${(param.i_action != null) and (param.i_action[0] == 'suxs')}" class="alert alert-success alert-dismissible notification" role="alert">
+ 					<i class="fa fa-check-circle notificationLogo">&nbsp;&nbsp;</i>
+ 					Income added Successfully
         			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					  <span aria-hidden="true">&times;</span>
 					</button>
         		</div>
-			      <div th:if="${(param.e_action != null) and (param.e_action[0] == 'add')}" class="alert alert-success alert-dismissible" role="alert">Expense added Successfully
+			      <div th:if="${(param.e_action != null) and (param.e_action[0] == 'add')}" class="alert alert-success alert-dismissible notification" role="alert">
+ 					<i class="fa fa-check-circle notificationLogo">&nbsp;&nbsp;</i>			      
+			      	Expense added Successfully
         			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					  <span aria-hidden="true">&times;</span>
 					</button>
-        		</div>        		
+        		</div> 
+        		<div th:if="${(param.e_action != null) and (param.e_action[0] == 'expense_error')}" class="alert alert-danger alert-dismissible notification" role="alert">You don't have enough funds
+        		 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+        		</div>       	
+		<div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+			     	
         	<div class="row col-md-12 col-sm-12 col-xs-12">
             	<div class="pieChartContainer col-md-12 col-sm-12 hidden-xs">
             		<div class="col-md-12 col-sm-12  text-left">
@@ -78,7 +98,7 @@
                 	<div class="col-md-4 col-sm-4 col-xs-12">
                 		<div class="col-md-12 col-sm-12 col-xs-12 amount">
                         	<h3>Savings</h3>
-                            <h1 id="savings">$450</h1>
+                            <h1 th:text="${'$'+currentSavings}" id="savings"></h1>
                             <p th:text="'as on'+' '+${currentDate}"></p>                         
                         </div>
                 	</div>  	              	
@@ -88,13 +108,55 @@
                     <div class="row">
                     	<div class="categoriesInner">
                         	<div class="col-md-4 col-sm-4 col-xs-6">
-                            	<a href="">
+                            	<a href="" data-toggle="modal" data-target="#rentModal">
                                     <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 categories">
                                     	<h3><i class="fa fa-home"></i></h3>
                                         <h3 class="hidden-xs">Rent</h3>
                                         <h5 th:text="${'$'+rent}"></h5>
                                     </div>
                                  </a>
+                                <!--  <div class="modal fade col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1" id="rentModal" tabindex="-1" role="dialog" aria-labelledby="rentModal">
+									  <div class="modal-dialog" role="document">
+									    <div class="modal-content">
+									      <div class="modal-header">
+									        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									        <h2 class="modal-title text-center" id="rentModal">Rent</h2>
+									      </div>
+									      <div class="modal-body">
+									        <form th:action="@{/Expense/Add}" method="post" th:object="${expense}">
+									        	<div class="form-group">
+								            		<label for="">Amount Spent</label>
+								            		<input type="text" th:field="*{amountSpent}"  class="form-control" autofocus="autofocus"/>
+								            		<label th:if="${#fields.hasErrors('amountSpent')}">* amount can't be empty or can't have alphabets</label>
+								            	</div>
+								                 <div class="form-group">
+								                	<label for="">Date Spent</label>
+								                    <input type="date" class="form-control" th:field="*{dateSpent}"/>
+								            		<label th:if="${#fields.hasErrors('dateSpent')}">* please enter or choose a valid date</label>                    
+								                </div>
+								                <div class="form-group">
+								                	<label for="">Place</label>
+								                    <input type="text" class="form-control" th:field="*{placeSpent}" />
+								            		<label th:if="${#fields.hasErrors('dateSpent')}">* place can't have numbers or special characters</label>                    
+								                 </div>
+								                 <div class="form-group">
+								                	<label for="category">Category</label>
+								                    <select name="category" id="category" class="form-control" th:field="*{category}">
+								                    	<option value="rent" th:value="rent" >Rent</option>
+								                    </select>
+								            		<label th:if="${#fields.hasErrors('dateSpent')}">* choose a category</label>                    
+								                 </div>
+								                 <div class="form-group spacing">
+								                	<button class="form-control button"><i class="fa fa-minus">&nbsp;</i>Add Expense</button>
+								                 </div>
+									        </form>
+									      </div>
+									      <div class="modal-footer">
+									        
+									      </div>
+									    </div>
+									  </div>
+									</div> -->
                             </div>
                         	<div class="vol-md-4 col-sm-4 col-xs-6">
                             	<a href="">
@@ -159,6 +221,7 @@
     </main>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/chart.js" type="text/javascript"></script>
     <script src="/js/custom.js" type="text/javascript"></script>
 </body>
 </html>

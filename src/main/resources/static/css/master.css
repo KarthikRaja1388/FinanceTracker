@@ -10,6 +10,7 @@ html,main{
 body{
 	background-image:url(../img/stonehaven.png);
 	height:100%;
+	z-index: 1;
 }
 .wrapper{
 	min-height:600px;
@@ -19,6 +20,8 @@ body{
 	transform:translate(-50%,-50%);
 	background:#4E2A84;
 	border-radius:0px;
+	z-index: 1;
+	
 }
 .title{
 	color:#fff;
@@ -54,6 +57,80 @@ body{
 .homeButton:hover{
 	color:#fff;
 }
+.notification{
+	width:400px;
+	height:100px;
+	background:#262626;
+	font-size:1em;
+	font-weight: bold;
+	border:none;
+	text-align: center;
+	line-height:70px;
+	position: absolute;
+	z-index: 999;
+	top:10%;
+	left:50%;
+	transform:translatex(-50%);
+	transform-origin:right;
+	animation:alert 1s linear;
+	transition:all 1s;
+	color: #fff;
+}
+.notificationLogo{
+	font-size: 2.5em;
+	position: absolute;
+	left:30px;
+	top:30px;
+}
+.notification button.close{
+	font-size: 30px;
+	color: red;
+	opacity: 1;
+}
+/* .preLoader{
+	height:100%;
+	width:100%;
+	background:#000;
+	z-index: 999;
+	position: relative;
+}
+
+.preLoader ul{
+	position: absolute;
+	top:50%;
+	left:50%;
+	transfrom: translate(-50%,-50%);
+}
+.preLoader ul li{
+	width: 6px;
+	height: 20px;
+	margin: 0px 4px;
+	background: #fff;
+	list-style-type: none;
+	display: inline-block;
+	animation: loaderAnimation .7s infinite alternate;
+	-webkit-animation: loaderAnimation .7s infinite alternate;	
+	
+} */
+/* .preLoader ul li:nth-child(1){
+	animation-delay:.1s;
+}
+.preLoader ul li:nth-child(2){
+	animation-delay:.2s;
+}
+.preLoader ul li:nth-child(3){
+	animation-delay:.3s;
+}
+.preLoader ul li:nth-child(4){
+	animation-delay:.4s;
+}
+.preLoader ul li:nth-child(5){
+	animation-delay:.5s;
+}
+.preLoader ul li:nth-child(6){
+	animation-delay:.6s;
+} */
+
 @font-face {
 	font-family:titlefont;
 	src:url(../fonts/FerroRosso.ttf);
@@ -107,5 +184,35 @@ body{
 		border-right-color:#fff;
 		border-bottom-color:#fff;
 		border-left-color:#fff;
+	}
+}
+
+@keyframes loaderAnimation{
+	0%{
+		transform:scaleY(1);
+	}
+	25%{
+		transform:scaleY(1);
+	}
+	50%{
+		transform:scaleY(1);
+	}
+	75%{
+		transform:scaleY(1);
+	}
+	100%{
+		transform:scaleY(1);
+	}
+}
+
+@keyframes alert{
+	0%{
+		opacity:0;
+	}
+	50%{
+	opacity:0.5;
+	}
+	100%{
+	opacity:1;
 	}
 }

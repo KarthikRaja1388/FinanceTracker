@@ -140,6 +140,10 @@ main{
 	font-weight:bold;
 }
 
+.categoriesInner .modal-title,
+.categoriesInner form{
+	color:#4E2A84;
+}
 @media screen and (max-width:450px){
 	#navContainer{
 		width:100%;

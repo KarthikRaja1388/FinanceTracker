@@ -15,6 +15,16 @@
 </head>
 
 <body>
+	<div class="preLoader">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
 	<div class="col-md-10 col-sm-10 col-xs-12 wrapper"><!--start of wrapper-->
     	<div class="row titleContainer">
         	<h2 class="text-center title">Finance Tracker</h2>
@@ -22,17 +32,18 @@
         </div>
         <div class="row">
         	<div class="col-md-6 col-sm-12 col-xs-12" id="formContainer"><!--Start of Form Container-->
-        		<div th:if="${(param.logout != null) and (param.logout[0] == 'y')}" class="alert alert-info alert-dismissible" role="alert">Logged out Successfully
+        		<div th:if="${(param.action != null) and (param.action[0] == 'logout')}" class="alert alert-info alert-dismissible notification" role="alert">
+        			<i class="fa fa-info-circle notificationLogo">&nbsp;&nbsp;</i>Logged out Successfully
         			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					  <span aria-hidden="true">&times;</span>
 					</button>
         		</div>
-        		<div th:if="${(param.register != null) and (param.register[0] == 'success')}" class="alert alert-success alert-dismissible" role="alert">Registered Successfully
+        		<div th:if="${(param.register != null) and (param.register[0] == 'success')}" class="alert alert-success alert-dismissible notification" role="alert">Registered Successfully
         			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					  <span aria-hidden="true">&times;</span>
 					</button>
         		</div>
-            	<form th:action="@{/login}" th:object="${user}" id="loginForm" class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2" method="post">
+            	<form th:action="@{/Login}" th:object="${user}" id="loginForm" class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2" method="post">
                 	<div class="form-group">
                     	<label for="userName">Username</label>
                         <input type="text" class="form-control" th:field="*{email}" id="userName" />
@@ -48,7 +59,7 @@
                     
                 </form>
                 <div class="forgotPassword col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 text-center">
-                	<a href="">Forgot Password</a><br /><br/>
+                	<a href="" th:href="@{/ForgotPassword}">Forgot Password</a><br /><br/>
                     New User : <a href="/Register" th:href="@{/Register}" style="font-weight:500;">Create Account</a>
                 </div>
             </div><!--End of Form Container-->

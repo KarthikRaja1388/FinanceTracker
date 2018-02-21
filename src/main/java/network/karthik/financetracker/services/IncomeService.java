@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,48 +20,123 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import network.karthik.financetracker.entity.Expense;
 import network.karthik.financetracker.entity.Income;
 import network.karthik.financetracker.repository.IIncomeRepository;
 import network.karthik.financetracker.repository.IUserRepository;
+import network.karthik.financetracker.utility.DateUtility;
 
 @Service
 public class IncomeService {
 
 	@Autowired
 	private IIncomeRepository incomeRepository;
-	
 	@Autowired
 	private IUserRepository userRepository;
+	@Autowired
+	private DateUtility dateUtility;
 	
-	public IncomeService(IIncomeRepository incomeRepository) {
+	
+	public IncomeService() {
+		super();
+	}
+
+	/*public IncomeService(IIncomeRepository incomeRepository) {
 		super();
 		this.incomeRepository = incomeRepository;
 	}
+
+	public IncomeService(IUserRepository userRepository) {
+		super();
+		this.userRepository = userRepository;
+	}*/
+
 
 	public void add(Income income) {
 		incomeRepository.save(income);
 	}
 	
-	public float getIncome(Long id) {
+	public Income getIncomeById(Long id) {
+		return incomeRepository.findOne(id);
+	}
+	
+	public float getAllIncome(Long id) {
 		List<Income> incomes = incomeRepository.findByUserUserId(id);
 		float totalIncome = 0;
 		for (Income income : incomes) {
 			totalIncome = totalIncome + income.getAmountReceived();
 		}
+		
 		return totalIncome;
 	}
 	
+	/**
+	 * 
+	 * @param id  Receives the value of User Id
+	 * @return totalIncome Total income based on user id passed
+	 */
+	public float getIncome(Long id) {
+		List<Income> incomes = incomeRepository.findByUserUserId(id);
+		float totalIncome = 0;
+		for (Income income : incomes) {
+			if(dateUtility.compareMonth(dateUtility.returnCurrentDate(), income.getDateReceived())) {
+				totalIncome = totalIncome + income.getAmountReceived();
+			}
+		}
+		return totalIncome;
+	}
+	/**
+	 * Method to fetch income based on the User ID for current month
+	 * 
+	 * @param id  Receives the value of User Id
+	 * @return incomeList List of income by month based on the Use Id passed
+	 */
 	public List<Income> findIncomeByMonth(Long id){
 		List<Income> incomeList = new ArrayList<>();
-		Iterator<Income> iterator = incomeRepository.findByUserUserId(id).iterator();
+		List<Income> incomes = incomeRepository.findByUserUserId(id);
 		
-		while(iterator.hasNext()) {
-			incomeList.add(iterator.next());
+		for(Income income : incomes) {
+			if(dateUtility.compareMonth(dateUtility.returnCurrentDate(), income.getDateReceived())) {
+				incomeList.add(income);
+			}
 		}
 		
 		return incomeList;
 	}
+	
+	public List<Income> findIncomeForChosenMonth(Long id,String month){
+		String date = null;
+		List<Income> incomeList = new ArrayList<>();
+		if(month.equalsIgnoreCase("Jan"))date = "2018-01-01";
+		if(month.equalsIgnoreCase("Feb"))date = "2018-02-01";
+		if(month.equalsIgnoreCase("Mar"))date = "2018-03-01";		
+		if(month.equalsIgnoreCase("Apr"))date = "2018-04-01";		
+		if(month.equalsIgnoreCase("May"))date = "2018-05-01";		
+		if(month.equalsIgnoreCase("Jun"))date = "2018-06-01";		
+		if(month.equalsIgnoreCase("Jul"))date = "2018-07-01";		
+		if(month.equalsIgnoreCase("Aug"))date = "2018-08-01";		
+		if(month.equalsIgnoreCase("Sep"))date = "2018-09-01";		
+		if(month.equalsIgnoreCase("Oct"))date = "2018-10-01";		
+		if(month.equalsIgnoreCase("Nov"))date = "2018-11-01";		
+		if(month.equalsIgnoreCase("Dec"))date = "2018-12-01";	
+		
+		List<Income> fetchedIncomeList = incomeRepository.findByUserUserId(id);
+		if(fetchedIncomeList != null) {
+			for(Income income : fetchedIncomeList) {
+				if(dateUtility.compareMonth(income.getDateReceived(), date)) {
+					incomeList.add(income);
+				}
+			}
+		}
+		
+		return incomeList;
+		
+	}
+	/**
+	 * Method to Build Excel document from the values fetched from DB
+	 * 
+	 * @param id holds the value of ID passed
+	 * @throws IOException IO Exception
+	 */
 	
 public void buildExcelDocument(Long id) throws IOException {
 		
@@ -91,7 +165,13 @@ public void buildExcelDocument(Long id) throws IOException {
 		workBook.close();
 		
 	}
-	
+	/**
+	 * Method for Downloading file
+	 * 
+	 * @param request HttpRequest
+	 * @param id User id passed
+	 * @throws IOException IOException
+	 */
 	 public void downloadFile(HttpServletRequest request, HttpServletResponse response,Long id) throws IOException {
 			
 		 String userName = userRepository.findOne(id).getFirstName();

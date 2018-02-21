@@ -13,22 +13,20 @@ import network.karthik.financetracker.entity.User;
 import network.karthik.financetracker.repository.IUserRepository;
 
 @Service
-public class CustomUserDetailService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService{
 
 	@Autowired
 	private IUserRepository userRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Optional<User> optionalUser = userRepository.findByEmail(email);
-
-		optionalUser
-			.ifPresent(user ->{ 
-				new CustomUserDetails(user);
-			});
-			
-		return optionalUser
-					.map(CustomUserDetails :: new).get();
+		User user = userRepository.findByEmail(email);
+		
+		if(user == null){
+			throw new UsernameNotFoundException("Username Not found");
+		}else{
+			return new CustomUserDetails(user);
+		}
 	}
 
 }
